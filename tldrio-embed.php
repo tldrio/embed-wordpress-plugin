@@ -37,14 +37,36 @@ function tldrio_embed () {
 
 <?php
 // add more buttons to the html editor
+// Works since version 3.3
 function appthemes_add_quicktags() {
 ?>
-    <script type="text/javascript">
-    if (QTags) {
-      QTags.addButton( 'eg_pre', 'caca', '<pre lang="php">', '</ pre>', null, 'DU CACA', 201 );
-    }
-    </script>
+  <script type="text/javascript">
+  if (QTags) {
+    QTags.addButton( 'eg_pre', 'caca', '<pre lang="php">', '</ pre>', null, 'DU CACA', 201 );
+  }
+  </script>
 <?php
 }
 add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
+?>
+
+
+
+<?php
+function tldrio_auto_embed() {
+  return '<blockquote data-use-own-tldr="true" class="tldr-embed-widget">
+    </blockquote><script async src="//localhost:8888/embed/widget-embed.js" charset="utf-8"></script>';
+}
+
+function tweet_shortcode_handler( $atts ) {
+  extract( shortcode_atts( array(
+    'foo' => 'something FFF',
+    'bar' => 'something else',
+  ), $atts ) );
+
+  return "foo = {$foo}";
+}
+
+add_shortcode( 'tldrio_embed', 'tweet_shortcode_handler' );
+add_shortcode( 'tldrio_auto_embed', 'tldrio_auto_embed' );
 ?>
