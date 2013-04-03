@@ -47,19 +47,21 @@ add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
 
 
 <?php
-function tldrio_auto_embed() {
-  return '<blockquote data-use-own-tldr="true" class="tldr-embed-widget">
+function tldrio_embed_code($options) {
+  return '<blockquote ' . $options . ' class="tldr-embed-widget" style="display: none;">
     </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
+}
+
+function tldrio_auto_embed() {
+  return tldrio_embed_code('data-use-own-tldr="true"');
 }
 
 function tldrio_embed_with_url($url, $show_title) {
-  return '<blockquote data-url="' . $url . '" data-show-title="' . $show_title . '" class="tldr-embed-widget">
-    </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
+  return tldrio_embed_code('data-url="' . $url . '" data-show-title="' . $show_title . '"');
 }
 
 function tldrio_embed_with_id($tldr_id, $show_title) {
-  return '<blockquote data-tldr-id="' . $tldr_id . '" data-show-title="' . $show_title . '" class="tldr-embed-widget">
-    </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
+  return tldrio_embed_code('data-tldr-id="' . $tldr_id . '" data-show-title="' . $show_title . '"');
 }
 
 function tldrio_embed( $atts ) {
@@ -67,6 +69,7 @@ function tldrio_embed( $atts ) {
     'url' => '',
     'tldr_id' => '',
     'show_title' => 'true',
+    'custom_title' => '',
   ), $atts ) );
 
   if (strlen($tldr_id) != 0) {
