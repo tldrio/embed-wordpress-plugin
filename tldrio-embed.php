@@ -35,11 +35,12 @@ function appthemes_add_quicktags() {
 ?>
   <script type="text/javascript">
   if (QTags) {
-    QTags.addButton( 'eg_pre', 'caca', '<pre lang="php">', '</ pre>', null, 'DU CACA', 201 );
+    QTags.addButton( 'tldrio-embed', 'tldr.io', '[tldrio_embed]', '', null, 'Embed a summary in your post', 501 );
   }
   </script>
 <?php
 }
+
 add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
 ?>
 
@@ -76,8 +77,12 @@ function tldrio_embed( $atts ) {
     return tldrio_embed_with_url($url, $show_title);
   }
 
-  // Default is a simple embed with url
-  return tldrio_embed_with_url($atts[0], true);
+  if (substr($atts[0], 0, 4) == 'http') {
+    return tldrio_embed_with_url($atts[0], true);
+  }
+
+  // By default: an auto embed
+  return tldrio_auto_embed();
 }
 
 add_shortcode( 'tldrio_embed', 'tldrio_embed' );
