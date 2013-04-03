@@ -51,31 +51,33 @@ function tldrio_auto_embed() {
     </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
 }
 
-function tldrio_embed_with_url($url) {
-  return '<blockquote data-url="' . $url . '" class="tldr-embed-widget">
+function tldrio_embed_with_url($url, $show_title) {
+  return '<blockquote data-url="' . $url . '" data-show-title="' . $show_title . '" class="tldr-embed-widget">
     </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
 }
 
-function tldrio_embed_with_id($tldrid) {
-  return '<blockquote data-tldr-id="' . $tldrid . '" class="tldr-embed-widget">
+function tldrio_embed_with_id($tldr_id, $show_title) {
+  return '<blockquote data-tldr-id="' . $tldr_id . '" data-show-title="' . $show_title . '" class="tldr-embed-widget">
     </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
 }
 
 function tldrio_embed( $atts ) {
   extract( shortcode_atts( array(
     'url' => '',
-    'tldrid' => '',
+    'tldr_id' => '',
+    'show_title' => 'true',
   ), $atts ) );
 
-  if (strlen($tldrid) != 0) {
-    return tldrio_embed_with_id($tldrid);
+  if (strlen($tldr_id) != 0) {
+    return tldrio_embed_with_id($tldr_id, $show_title);
   }
 
   if (strlen($url) != 0) {
-    return tldrio_embed_with_url($url);
+    return tldrio_embed_with_url($url, $show_title);
   }
 
-  return $atts[0];
+  // Default is a simple embed with url
+  return tldrio_embed_with_url($atts[0], true);
 }
 
 add_shortcode( 'tldrio_embed', 'tldrio_embed' );
