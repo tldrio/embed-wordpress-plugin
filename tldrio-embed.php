@@ -29,13 +29,6 @@ License: GPL2
 ?>
 
 <?php
-function tldrio_embed () {
-  echo "Hello world";
-}
-?>
-
-
-<?php
 // add more buttons to the html editor
 // Works since version 3.3
 function appthemes_add_quicktags() {
@@ -55,18 +48,36 @@ add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
 <?php
 function tldrio_auto_embed() {
   return '<blockquote data-use-own-tldr="true" class="tldr-embed-widget">
-    </blockquote><script async src="//localhost:8888/embed/widget-embed.js" charset="utf-8"></script>';
+    </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
 }
 
-function tweet_shortcode_handler( $atts ) {
+function tldrio_embed_with_url($url) {
+  return '<blockquote data-url="' . $url . '" class="tldr-embed-widget">
+    </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
+}
+
+function tldrio_embed_with_id($tldrid) {
+  return '<blockquote data-tldr-id="' . $tldrid . '" class="tldr-embed-widget">
+    </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
+}
+
+function tldrio_embed( $atts ) {
   extract( shortcode_atts( array(
-    'foo' => 'something FFF',
-    'bar' => 'something else',
+    'url' => '',
+    'tldrid' => '',
   ), $atts ) );
 
-  return "foo = {$foo}";
+  if (strlen($tldrid) != 0) {
+    return tldrio_embed_with_id($tldrid);
+  }
+
+  if (strlen($url) != 0) {
+    return tldrio_embed_with_url($url);
+  }
+
+  return $atts[0];
 }
 
-add_shortcode( 'tldrio_embed', 'tweet_shortcode_handler' );
+add_shortcode( 'tldrio_embed', 'tldrio_embed' );
 add_shortcode( 'tldrio_auto_embed', 'tldrio_auto_embed' );
 ?>
