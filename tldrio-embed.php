@@ -29,7 +29,7 @@ License: GPL2
 ?>
 
 <?php
-// add more buttons to the html editor
+// Add the tldr.io button to the editor
 // Works since version 3.3
 function appthemes_add_quicktags() {
 ?>
@@ -59,6 +59,8 @@ function tldrio_embed_code($options, $content) {
 }
 
 function tldrio_auto_embed() {
+  // Default link to the summary page if the embed can't displayed
+  // Useful for non compatible browsers such ad IE7 and older
   $autolink = '<a target="_blank" class="tldrio-auto-embed">Summary of this article</a> (via <a target="_blank" href="http://tldr.io">tldr.io</a>)
     <script>
       (function () {
