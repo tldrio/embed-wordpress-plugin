@@ -26,15 +26,11 @@ Click on the 'tldr.io' button in the Wordpress editor to include the default sho
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. You can now use the [tldrio_embed] and [tldrio_embed url] shortcodes (see 'Description')
 
-== Frequently Asked Questions ==
-
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets 
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png` 
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Embed the summary of your post.
+2. Embed the summary of any article.
+3. Use the tldr.io button to go even faster.
 
 == Changelog ==
 
