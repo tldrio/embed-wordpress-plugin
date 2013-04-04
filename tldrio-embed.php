@@ -11,7 +11,7 @@ License: GPL2
 ?>
 
 <?php
-/*  Copyright YEAR  PLUGIN_AUTHOR_NAME  (email : PLUGIN AUTHOR EMAIL)
+/*  Copyright 2013 tldr.io  (email : hello@tldr.io)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -47,13 +47,31 @@ add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
 
 
 <?php
-function tldrio_embed_code($options) {
-  return '<blockquote ' . $options . ' class="tldr-embed-widget" style="display: none;">
-    </blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
+function tldrio_embed_code($options, $content) {
+  $display = ' style="display: none;"';
+
+  if (strlen($content) > 0) {
+    $display = '';
+  }
+
+  return '<blockquote ' . $options . ' class="tldr-embed-widget"' . $display . '>' . $content .
+    '</blockquote><script async src="//tldr.io/embed/widget-embed.j" charset="utf-8"></script>';
 }
 
 function tldrio_auto_embed() {
-  return tldrio_embed_code('data-use-own-tldr="true"');
+  $autolink = '<a target="_blank" class="tldrio-auto-embed">Summary of this article</a> (via <a target="_blank" href="http://tldr.io">tldr.io</a>)
+    <script>
+      (function () {
+        var links = document.getElementsByTagName("a"), i;
+        for (i in links) {
+          if ((" " + links[i].className + " ").indexOf(" tldrio-auto-embed ") !== -1) {
+            links[i].href= "http://tldr.io/tldrs/search?url=" + window.location;
+          }
+        }
+      })();
+    </script>';
+
+  return tldrio_embed_code('data-use-own-tldr="true"', $autolink);
 }
 
 function tldrio_embed_with_url($url, $show_title) {
