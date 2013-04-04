@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Embed summaries from tldr.io
+Plugin Name: Embed tldr.io summaries
 Plugin URI: http://tldr.io/embedded-tldrs
 Description: Allows you to embed the summary of any webpage in your blogpost
 Version: 0.0.1
@@ -33,11 +33,11 @@ License: GPL2
 // Works since version 3.3
 function appthemes_add_quicktags() {
 ?>
-  <script type="text/javascript">
-  if (QTags) {
+<script type="text/javascript">
+  if (QTags && QTags.addButton) {
     QTags.addButton( 'tldrio-embed', 'tldr.io', '[tldrio_embed]', '', null, 'Embed a summary in your post', 501 );
   }
-  </script>
+</script>
 <?php
 }
 
@@ -82,7 +82,7 @@ function tldrio_embed_with_id($tldr_id, $show_title) {
   return tldrio_embed_code('data-tldr-id="' . $tldr_id . '" data-show-title="' . $show_title . '"');
 }
 
-function tldrio_embed( $atts ) {
+function tldrio_embed($atts) {
   extract( shortcode_atts( array(
     'url' => '',
     'tldr_id' => '',
