@@ -117,34 +117,33 @@ add_shortcode( 'tldrio_auto_embed', 'tldrio_auto_embed' );
 
 <?php
 // Manage options
-if ( is_admin() ){ // admin actions
-  add_action( 'admin_menu', 'my_plugin_menu' );
-  add_action('admin_init', 'plugin_admin_init');
+if ( is_admin() ){
+  add_action( 'admin_menu', 'tldrio_embed_plugin_menu' );
+  add_action('admin_init', 'tldrio_embed_admin_init');
 }
 
-function plugin_admin_init(){
-  register_setting( 'plugin_options', 'plugin_options', 'plugin_options_validate' );
-  add_settings_section('plugin_main', 'Main Settings', 'plugin_section_text', 'plugin');
-  add_settings_field('plugin_text_string', 'Plugin Text Input', 'plugin_setting_string', 'plugin', 'plugin_main');
+function tldrio_embed_admin_init(){
+  register_setting( 'tldrio_embed_options_group', 'tldrio_embed_options', 'tldrio_embed_options_validate' );
+  add_settings_section('tldrio_embed_options_main', 'Settings', 'tldrio_embed_main_text', 'tldrio_options_page');
+  add_settings_field('plugin_text_string', 'Plugin Text Input', 'plugin_setting_string', 'tldrio_options_page', 'tldrio_embed_options_main');
 }
 
-function plugin_section_text() {
-  echo '<p>Main description of this section here.</p>';
+function tldrio_embed_main_text() {
 }
 
 function plugin_setting_string() {
-  $options = get_option('plugin_options');
-  echo "<input id='plugin_text_string' name='plugin_options[text_string]' size='40' type='text' value='{$options['text_string']}' />";
+  $options = get_option('tldrio_embed_options');
+  echo "<input id='plugin_text_string' name='tldrio_embed_options[text_string]' size='40' type='text' value='{$options['text_string']}' />";
 }
 
-function plugin_options_validate($input) {
+function tldrio_embed_options_validate($input) {
   $newinput['text_string'] = trim($input['text_string']);
 
   return $newinput;
 }
 
 
-function my_plugin_menu() {
+function tldrio_embed_plugin_menu() {
 	add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', 'my_plugin_options' );
 }
 
@@ -156,15 +155,10 @@ function my_plugin_options() {
   <div class="wrap">
   <?php screen_icon(); ?>
   <h2>Embed tldr.io summaries</h2>
-  <p>Here is where the form would go if I actually had options.</p>
-
-<form action="options.php" method="post">
-<?php settings_fields('plugin_options'); ?>   // string anything as long as unique
-<?php do_settings_sections('plugin'); ?>
- 
-<input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" />
-
-
+    <form action="options.php" method="post">
+    <?php settings_fields('tldrio_embed_options_group'); ?>
+    <?php do_settings_sections('tldrio_options_page'); ?>
+    <input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" />
   </form>
   </div>
 <?php
