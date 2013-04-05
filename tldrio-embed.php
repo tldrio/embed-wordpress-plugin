@@ -47,6 +47,7 @@ add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
 
 
 <?php
+// Manage the embed shortcodes
 function tldrio_embed_code($options, $content) {
   $display = ' style="display: none;"';
 
@@ -54,9 +55,10 @@ function tldrio_embed_code($options, $content) {
     $display = '';
   }
 
-  wp_enqueue_script('tldrio_embed_script', '//tldr.io/embed/widget-embed.js', NULL, NULL, true);
+  wp_enqueue_script('tldrio_embed_script', 'https://tldr.io/embed/widget-embed.js', NULL, NULL, true);
 
-  return '<blockquote ' . $options . ' class="tldr-embed-widget"' . $display . '>' . $content . '</blockquote>';
+  return '<blockquote ' . $options . ' class="tldr-embed-widget"' . $display . '>' . $content .
+    '</blockquote>';
 }
 
 function tldrio_auto_embed() {
@@ -111,4 +113,60 @@ function tldrio_embed($atts) {
 
 add_shortcode( 'tldrio_embed', 'tldrio_embed' );
 add_shortcode( 'tldrio_auto_embed', 'tldrio_auto_embed' );
+?>
+
+<?php
+// Manage options
+if ( is_admin() ){ // admin actions
+  add_action( 'admin_menu', 'my_plugin_menu' );
+  add_action('admin_init', 'plugin_admin_init');
+}
+
+function plugin_admin_init(){
+  register_setting( 'plugin_options', 'plugin_options', 'plugin_options_validate' );
+  add_settings_section('plugin_main', 'Main Settings', 'plugin_section_text', 'plugin');
+  add_settings_field('plugin_text_string', 'Plugin Text Input', 'plugin_setting_string', 'plugin', 'plugin_main');
+}
+
+function plugin_section_text() {
+  echo '<p>Main description of this section here.</p>';
+}
+
+function plugin_setting_string() {
+  $options = get_option('plugin_options');
+  echo "<input id='plugin_text_string' name='plugin_options[text_string]' size='40' type='text' value='{$options['text_string']}' />";
+}
+
+function plugin_options_validate($input) {
+  $newinput['text_string'] = trim($input['text_string']);
+
+  return $newinput;
+}
+
+
+function my_plugin_menu() {
+	add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', 'my_plugin_options' );
+}
+
+function my_plugin_options() {
+  if ( !current_user_can( 'manage_options' ) )  {
+    wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+  }
+?>
+  <div class="wrap">
+  <?php screen_icon(); ?>
+  <h2>Embed tldr.io summaries</h2>
+  <p>Here is where the form would go if I actually had options.</p>
+
+<form action="options.php" method="post">
+<?php settings_fields('plugin_options'); ?>   // string anything as long as unique
+<?php do_settings_sections('plugin'); ?>
+ 
+<input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" />
+
+
+  </form>
+  </div>
+<?php
+}
 ?>
