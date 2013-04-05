@@ -32,6 +32,17 @@ Click on the 'tldr.io' button in the Wordpress editor to include the default sho
 2. Embed the summary of any article.
 3. Use the tldr.io button to go even faster.
 
+== Frequently Asked Questions ==
+
+= Why does this plugin need to call tldr.io's server on every page it's
+used? =
+
+The tldr.io summaries are stored on our servers. They are indexed by the
+URL of the article they're the tldr of. So we need the embed widget to
+tell our servers the URL corresponding to the requested tldr, so we can
+send it to the widget. The calls are secured by SSL, meaning they can't
+be read by third parties.
+
 == Changelog ==
 
 = 0.0.1 =
