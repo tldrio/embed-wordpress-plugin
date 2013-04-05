@@ -177,9 +177,10 @@ function tldrio_embed_generate_options_page() {
 <?php
 }
 
-register_uninstall_hook(__FILE__, 'tldrio_embed_clean_options');
-function tldrio_embed_clean_options () {
-  delete_options('tldrio_embed_options');
+function tldrio_embed_deactivate() {
+       delete_option('tldrio_embed_options');
 }
+
+register_deactivation_hook(__FILE__, 'tldrio_embed_deactivate');
 
 ?>
