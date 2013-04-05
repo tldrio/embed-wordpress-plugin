@@ -129,7 +129,7 @@ function tldrio_embed_admin_init() {
   register_setting( 'tldrio_embed_options_group', 'tldrio_embed_options', 'tldrio_embed_options_validate' );
   add_settings_section('tldrio_embed_options_main', 'Settings', 'tldrio_embed_main_text', 'tldrio_options_page');
   add_settings_field('tldrio_embed_all_settings', 'Display default link', 'tldrio_embed_display_default_link', 'tldrio_options_page', 'tldrio_embed_options_main');
-  add_settings_field('tldrio_embed_all_settings2', 'Display tldr.io button in post editor', 'tldrio_embed_display_tldrio_button', 'tldrio_options_page', 'tldrio_embed_options_main');
+  add_settings_field('tldrio_embed_all_settings2', 'Display tldr.io button in post editor', 'tldrio_embed_display_edit_button', 'tldrio_options_page', 'tldrio_embed_options_main');
 }
 
 function tldrio_embed_main_text() {
@@ -137,12 +137,20 @@ function tldrio_embed_main_text() {
 
 function tldrio_embed_display_default_link() {
   $options = get_option('tldrio_embed_options');
+
+  // Dont display the link by default
+  if (strlen($options[default_link]) == 0) { $options[default_link] = 'no'; }
+
   echo '<label><input name="tldrio_embed_options[default_link]" type="radio" value="yes"' . ($options[default_link] == 'yes' ? ' checked="checked"' : '') . '> Yes</label>&nbsp;&nbsp;';
   echo '<label><input name="tldrio_embed_options[default_link]" type="radio" value="no"' . ($options[default_link] == 'no' ? ' checked="checked"' : '') . '> No</label>';
 }
 
-function tldrio_embed_display_tldrio_button () {
+function tldrio_embed_display_edit_button () {
   $options = get_option('tldrio_embed_options');
+
+  // Use edit button by default
+  if (strlen($options[edit_button]) == 0) { $options[edit_button] = 'yes'; }
+
   echo '<label><input name="tldrio_embed_options[edit_button]" type="radio" value="yes"' . ($options[edit_button] == 'yes' ? ' checked="checked"' : '') . '> Yes</label>&nbsp;&nbsp;';
   echo '<label><input name="tldrio_embed_options[edit_button]" type="radio" value="no"' . ($options[edit_button] == 'no' ? ' checked="checked"' : '') . '> No</label>';
 }
@@ -168,4 +176,10 @@ function tldrio_embed_generate_options_page() {
   </div>
 <?php
 }
+
+register_uninstall_hook(__FILE__, 'tldrio_embed_clean_options');
+function tldrio_embed_clean_options () {
+  delete_options('tldrio_embed_options');
+}
+
 ?>
