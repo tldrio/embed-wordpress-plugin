@@ -122,35 +122,29 @@ if ( is_admin() ){
   add_action('admin_init', 'tldrio_embed_admin_init');
 }
 
-function tldrio_embed_admin_init(){
+function tldrio_embed_admin_init() {
   register_setting( 'tldrio_embed_options_group', 'tldrio_embed_options', 'tldrio_embed_options_validate' );
   add_settings_section('tldrio_embed_options_main', 'Settings', 'tldrio_embed_main_text', 'tldrio_options_page');
-  add_settings_field('plugin_text_string', 'Plugin Text Input', 'plugin_setting_string', 'tldrio_options_page', 'tldrio_embed_options_main');
+  add_settings_field('tldrio_embed_all_settings', 'Display default link', 'tldrio_embed_display_default_link', 'tldrio_options_page', 'tldrio_embed_options_main');
 }
 
 function tldrio_embed_main_text() {
 }
 
-function plugin_setting_string() {
+function tldrio_embed_display_default_link() {
   $options = get_option('tldrio_embed_options');
   echo "<input id='plugin_text_string' name='tldrio_embed_options[text_string]' size='40' type='text' value='{$options['text_string']}' />";
 }
 
 function tldrio_embed_options_validate($input) {
-  $newinput['text_string'] = trim($input['text_string']);
-
-  return $newinput;
+  return $input;
 }
-
 
 function tldrio_embed_plugin_menu() {
-	add_options_page( 'My Plugin Options', 'My Plugin', 'manage_options', 'my-unique-identifier', 'my_plugin_options' );
+	add_options_page( 'Embed tldr.io summaries - options', 'Embed tldr.io summaries', 'manage_options', 'tldrio_embed_options_page', 'tldrio_embed_generate_options_page' );
 }
 
-function my_plugin_options() {
-  if ( !current_user_can( 'manage_options' ) )  {
-    wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-  }
+function tldrio_embed_generate_options_page() {
 ?>
   <div class="wrap">
   <?php screen_icon(); ?>
