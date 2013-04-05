@@ -54,8 +54,9 @@ function tldrio_embed_code($options, $content) {
     $display = '';
   }
 
-  return '<blockquote ' . $options . ' class="tldr-embed-widget"' . $display . '>' . $content .
-    '</blockquote><script async src="//tldr.io/embed/widget-embed.js" charset="utf-8"></script>';
+  wp_enqueue_script('tldrio_embed_script', '//tldr.io/embed/widget-embed.js', NULL, NULL, true);
+
+  return '<blockquote ' . $options . ' class="tldr-embed-widget"' . $display . '>' . $content . '</blockquote>';
 }
 
 function tldrio_auto_embed() {
