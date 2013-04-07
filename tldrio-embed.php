@@ -60,8 +60,6 @@ function tldrio_embed_code($options, $content) {
 
   wp_enqueue_script('tldrio_embed_script', 'https://tldr.io/embed/widget-embed.js', NULL, NULL, true);
 
-  return '========' . $content;
-
   return '<blockquote ' . $options . ' class="tldr-embed-widget"' . $display . '>' . $content .
     '</blockquote>';
 }
@@ -147,20 +145,20 @@ function tldrio_embed_display_default_link() {
   $options = get_option('tldrio_embed_options');
 
   // Dont display the link by default
-  if (strlen($options[default_link]) == 0) { $options[default_link] = 'no'; }
+  if (strlen($options['default_link']) == 0) { $options['default_link'] = 'no'; }
 
-  echo '<label><input name="tldrio_embed_options[default_link]" type="radio" value="yes"' . ($options[default_link] == 'yes' ? ' checked="checked"' : '') . '> Yes</label>&nbsp;&nbsp;';
-  echo '<label><input name="tldrio_embed_options[default_link]" type="radio" value="no"' . ($options[default_link] == 'no' ? ' checked="checked"' : '') . '> No</label>';
+  echo '<label><input name="tldrio_embed_options[default_link]" type="radio" value="yes"' . ($options['default_link'] == 'yes' ? ' checked="checked"' : '') . '> Yes</label>&nbsp;&nbsp;';
+  echo '<label><input name="tldrio_embed_options[default_link]" type="radio" value="no"' . ($options['default_link'] == 'no' ? ' checked="checked"' : '') . '> No</label>';
 }
 
 function tldrio_embed_display_edit_button () {
   $options = get_option('tldrio_embed_options');
 
   // Use edit button by default
-  if (strlen($options[edit_button]) == 0) { $options[edit_button] = 'yes'; }
+  if (strlen($options['edit_button']) == 0) { $options['edit_button'] = 'yes'; }
 
-  echo '<label><input name="tldrio_embed_options[edit_button]" type="radio" value="yes"' . ($options[edit_button] == 'yes' ? ' checked="checked"' : '') . '> Yes</label>&nbsp;&nbsp;';
-  echo '<label><input name="tldrio_embed_options[edit_button]" type="radio" value="no"' . ($options[edit_button] == 'no' ? ' checked="checked"' : '') . '> No</label>';
+  echo '<label><input name="tldrio_embed_options[edit_button]" type="radio" value="yes"' . ($options['edit_button'] == 'yes' ? ' checked="checked"' : '') . '> Yes</label>&nbsp;&nbsp;';
+  echo '<label><input name="tldrio_embed_options[edit_button]" type="radio" value="no"' . ($options['edit_button'] == 'no' ? ' checked="checked"' : '') . '> No</label>';
 }
 
 function tldrio_embed_options_validate($input) {
