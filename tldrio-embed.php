@@ -134,8 +134,8 @@ if ( is_admin() ){
 function tldrio_embed_admin_init() {
   register_setting( 'tldrio_embed_options_group', 'tldrio_embed_options', 'tldrio_embed_options_validate' );
   add_settings_section('tldrio_embed_options_main', 'Settings', 'tldrio_embed_main_text', 'tldrio_options_page');
-  add_settings_field('tldrio_embed_all_settings', 'Display default link', 'tldrio_embed_display_default_link', 'tldrio_options_page', 'tldrio_embed_options_main');
-  add_settings_field('tldrio_embed_all_settings2', 'Display tldr.io button in post editor', 'tldrio_embed_display_edit_button', 'tldrio_options_page', 'tldrio_embed_options_main');
+  add_settings_field('tldrio_embed_all_settings', 'Display permalink to the tldr in Internet Explorer 7 and older (the only browser that doesn\'t support the full embed)', 'tldrio_embed_display_default_link', 'tldrio_options_page', 'tldrio_embed_options_main');
+  add_settings_field('tldrio_embed_all_settings2', 'Display the tldr.io button in the post editor', 'tldrio_embed_display_edit_button', 'tldrio_options_page', 'tldrio_embed_options_main');
 }
 
 function tldrio_embed_main_text() {
@@ -177,6 +177,7 @@ function tldrio_embed_generate_options_page() {
     <form action="options.php" method="post">
     <?php settings_fields('tldrio_embed_options_group'); ?>
     <?php do_settings_sections('tldrio_options_page'); ?>
+    <br>
     <input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" />
   </form>
   </div>
