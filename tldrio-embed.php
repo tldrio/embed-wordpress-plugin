@@ -41,7 +41,10 @@ function appthemes_add_quicktags() {
 <?php
 }
 
-add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
+$options = get_option('tldrio_embed_options');
+if ($options['edit_button'] == 'yes') {
+  add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
+}
 ?>
 
 
@@ -50,7 +53,6 @@ add_action( 'admin_print_footer_scripts', 'appthemes_add_quicktags' );
 // Manage the embed shortcodes
 function tldrio_embed_code($options, $content) {
   $display = ' style="display: none;"';
-  $options = get_option('tldrio_embed_options');
 
   if (strlen($content) > 0) {
     $display = '';
@@ -58,26 +60,32 @@ function tldrio_embed_code($options, $content) {
 
   wp_enqueue_script('tldrio_embed_script', 'https://tldr.io/embed/widget-embed.js', NULL, NULL, true);
 
-  return 'OPTIONS ' . $options[default_link] . ' - ' . $options['edit_button'];
+  return '========' . $content;
 
   return '<blockquote ' . $options . ' class="tldr-embed-widget"' . $display . '>' . $content .
     '</blockquote>';
 }
 
 function tldrio_auto_embed() {
-  // Default link to the summary page if the embed can't displayed
-  // Useful for non compatible browsers such ad IE7 and older
-  $autolink = '<a target="_blank" class="tldrio-auto-embed">Summary of this article</a> (via <a target="_blank" href="http://tldr.io">tldr.io</a>)
-    <script>
-      (function () {
-        var links = document.getElementsByTagName("a"), i;
-        for (i in links) {
-          if ((" " + links[i].className + " ").indexOf(" tldrio-auto-embed ") !== -1) {
-            links[i].href= "http://tldr.io/tldrs/search?url=" + window.location;
+  $options = get_option('tldrio_embed_options');
+  $autolink = '';
+
+  if ($options['default_link'] == 'yes') {
+    // Default link to the summary page if the embed can't displayed
+    // Useful for non compatible browsers such ad IE7 and older
+    // Show it only if user has opted-in
+    $autolink = '<a target="_blank" class="tldrio-auto-embed">Summary of this article</a> (via <a target="_blank" href="http://tldr.io">tldr.io</a>)
+      <script>
+        (function () {
+          var links = document.getElementsByTagName("a"), i;
+          for (i in links) {
+            if ((" " + links[i].className + " ").indexOf(" tldrio-auto-embed ") !== -1) {
+              links[i].href= "http://tldr.io/tldrs/search?url=" + window.location;
+            }
           }
-        }
-      })();
-    </script>';
+        })();
+      </script>';
+  }
 
   return tldrio_embed_code('data-use-own-tldr="true"', $autolink);
 }
@@ -178,9 +186,18 @@ function tldrio_embed_generate_options_page() {
 }
 
 function tldrio_embed_deactivate() {
-       delete_option('tldrio_embed_options');
+  delete_option('tldrio_embed_options');
 }
 
 register_deactivation_hook(__FILE__, 'tldrio_embed_deactivate');
+
+// Upon activation, use Wordpress.org-compliant defaults (i.e. no showing a link to a tldr.io page
+// If the user hasn't explicitely opted-in first
+function tldrio_embed_activate() {
+  update_option('tldrio_embed_options', array('edit_button' => 'yes', 'default_link' => 'no'));
+}
+
+register_activation_hook(__FILE__, 'tldrio_embed_activate');
+
 
 ?>
